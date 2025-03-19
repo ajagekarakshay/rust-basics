@@ -1,4 +1,4 @@
-use std::{io, thread::Thread};
+use std::io;
 use rand::Rng;
 use anyhow::{Result, Context};
 
@@ -20,22 +20,24 @@ fn main() -> Result<()>{
         num = guess.trim().parse::<u32>().context("Failed to convert string")?;
         check = compare_guess(&secret, &num);
     }
-    
+
     Ok(())
 }
 
 
-fn compare_guess(secret: &u32, guess: &u32) -> bool{
-    if guess > secret{
-        println!("Guess is higher");
-        false
-    }
-    else if guess < secret {
-        println!("Guess is lower");
-        false
-    }
-    else {
-        println!("Bingo!!!");
-        true
+fn compare_guess(secret: &u32, guess: &u32) -> bool {    
+    match guess.cmp(secret) {
+        std::cmp::Ordering::Greater => {
+            println!("Guess is higher");
+            false
+        }
+        std::cmp::Ordering::Less => {
+            println!("Guess is lower");
+            false
+        }
+        std::cmp::Ordering::Equal => {
+            println!("Bingo!!!");
+            true
+        }
     }
 }
